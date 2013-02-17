@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12C60" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AltName" representedClassName="AltName" syncable="YES">
+        <attribute name="altName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="language" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Language" inverseName="altNames" inverseEntity="Language" syncable="YES"/>
+    </entity>
+    <entity name="AudioTrack" representedClassName="AudioTrack" syncable="YES">
+        <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="file" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileSize" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="grn_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="picture" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="program" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Program" inverseName="audioTracks" inverseEntity="Program" syncable="YES"/>
+    </entity>
+    <entity name="Language" representedClassName="Language" syncable="YES">
+        <attribute name="defaultName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="grn_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="iso" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="altNames" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AltName" inverseName="language" inverseEntity="AltName" syncable="YES"/>
+        <relationship name="locations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Location" inverseName="languages" inverseEntity="Location" syncable="YES"/>
+        <relationship name="majorLanguages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Language" inverseName="majorLanguages" inverseEntity="Language" syncable="YES"/>
+        <relationship name="program" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Program" inverseName="languages" inverseEntity="Program" syncable="YES"/>
+        <relationship name="sample" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Sample" inverseName="language" inverseEntity="Sample" syncable="YES"/>
+    </entity>
+    <entity name="Location" representedClassName="Location" syncable="YES">
+        <attribute name="countryCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="defaultName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="frenchName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="grn_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="locationType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mcc" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="languages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Language" inverseName="locations" inverseEntity="Language" syncable="YES"/>
+        <relationship name="relatedLocations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Location" inverseName="relatedLocations" inverseEntity="Location" syncable="YES"/>
+    </entity>
+    <entity name="MediaType" representedClassName="MediaType" syncable="YES">
+        <attribute name="baseUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="videoTrack" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="VideoTrack" inverseName="mediaType" inverseEntity="VideoTrack" syncable="YES"/>
+    </entity>
+    <entity name="Program" representedClassName="Program" syncable="YES">
+        <attribute name="baseAudio" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="baseHdpi" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="baseMdpi" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="basePic" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="downloaded" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="feature" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="grn_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="numTracks" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalSize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="audioTracks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AudioTrack" inverseName="program" inverseEntity="AudioTrack" syncable="YES"/>
+        <relationship name="languages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Language" inverseName="program" inverseEntity="Language" syncable="YES"/>
+        <relationship name="type" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ProgramType" inverseName="program" inverseEntity="ProgramType" syncable="YES"/>
+        <relationship name="videoTrack" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="VideoTrack" inverseName="program" inverseEntity="VideoTrack" syncable="YES"/>
+    </entity>
+    <entity name="ProgramType" representedClassName="ProgramType" syncable="YES">
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="grn_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="pictureUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="program" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Program" inverseName="type" inverseEntity="Program" syncable="YES"/>
+    </entity>
+    <entity name="Sample" representedClassName="Sample" syncable="YES">
+        <attribute name="grn_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="youtube" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="language" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Language" inverseName="sample" inverseEntity="Language" syncable="YES"/>
+    </entity>
+    <entity name="VideoTrack" representedClassName="VideoTrack" syncable="YES">
+        <attribute name="reference" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="mediaType" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MediaType" inverseName="videoTrack" inverseEntity="MediaType" syncable="YES"/>
+        <relationship name="program" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Program" inverseName="videoTrack" inverseEntity="Program" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AltName" positionX="340" positionY="297" width="128" height="75"/>
+        <element name="AudioTrack" positionX="304" positionY="-141" width="128" height="148"/>
+        <element name="Language" positionX="142" positionY="270" width="128" height="165"/>
+        <element name="Location" positionX="126" positionY="486" width="128" height="165"/>
+        <element name="MediaType" positionX="423" positionY="108" width="128" height="90"/>
+        <element name="Program" positionX="144" positionY="-216" width="128" height="268"/>
+        <element name="ProgramType" positionX="-99" positionY="36" width="128" height="103"/>
+        <element name="Sample" positionX="-162" positionY="207" width="128" height="90"/>
+        <element name="VideoTrack" positionX="448" positionY="-27" width="128" height="90"/>
+    </elements>
+</model>
