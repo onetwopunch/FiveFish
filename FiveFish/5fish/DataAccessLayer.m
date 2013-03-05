@@ -7,7 +7,6 @@
 //
 
 #import "DataAccessLayer.h"
-//#import "SQLHelper.h"
 #import "JSONAccess.h"
 #import "LanguageRepository.h"
 #import "LocationRepository.h"
@@ -16,14 +15,21 @@
 
 @implementation DataAccessLayer
 
-
-
-
-
-
-
-
-
++(UIImage*) getImageById: (NSNumber*)grn_id{
+    
+    NSString * path = [NSString stringWithFormat:@"%d.png", [grn_id intValue]];
+    return [UIImage imageNamed:path];
+}
++(UIImage*)getFlagImageByCode: (NSString*) code{
+    NSString * path;
+    if (code!=nil)
+        
+        path = [NSString stringWithFormat:@"%@.png", [code lowercaseString]];
+    else
+        path = @"placeholder.png";
+    
+    return [UIImage imageNamed:path];
+}
 +(NSArray *) getLanguageNamesFromFile{
     
     JSONAccess *jsonAccess = [[JSONAccess alloc] init];
@@ -103,7 +109,48 @@
     return program;
 }
 
++(NSArray*) getDownloadedPrograms{
+    return [[ProgramRepository sharedRepo] getDownloadedPrograms];
+}
++(NSDictionary*)getDownloadedProgramsByLanguage{
+    NSArray * programs = [[ProgramRepository sharedRepo]getDownloadedPrograms];
+    NSMutableDictionary * progByLang = [[NSMutableDictionary alloc] init];
+    for(Program * prog in programs){
+        NSString * languageName;
+        NSMutableArray * progArray;
+        @try{
+            //get language
+            NSArray * languages = [prog.languages allObjects];
+            Language* language = [languages objectAtIndex:0];
+            languageName = language.defaultName;
+            
+            //see if we've already stored an array of programs in it
+            if ([progByLang objectForKey:languageName] ==nil) {
+                progArray = [[NSMutableArray alloc] initWithObjects:prog, nil];
+            }
+            
+            //if it already exists, just add the program to it
+            else{
+                progArray = [progByLang objectForKey:languageName];
+                [progArray addObject:prog];
+            }
+            if ([languages count] >1) {
+                NSLog(@"More than one language for program, %@", prog.title); 
+            }
+        }
+        @catch (NSException *e) {
+            languageName = @"Unknown Language";
+        }
+        [progByLang setObject:progArray forKey:languageName];
+    }
+    return progByLang;
+}
 
++(NSArray*) getSortedTracks: (Program*) program{
+    
+    NSSortDescriptor * descriptor = [NSSortDescriptor sortDescriptorWithKey:@"file" ascending:YES];
+    return [program.audioTracks sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+}
 //------------------------------------------------------------------------------------------------
 // initial setup DO NOT USE IN DEPLOYMENT
 //------------------------------------------------------------------------------------------------

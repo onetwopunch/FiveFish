@@ -9,7 +9,6 @@
 #import "LanguageDetailViewController.h"
 #import "Program.h"
 #import "ProgramType.h"
-#import "ProgramDetailViewController.h"
 #import "DataAccessLayer.h"
 #import "AltName.h"
 #import "Sample.h"
@@ -22,20 +21,25 @@
 @end
 
 @implementation LanguageDetailViewController
-@synthesize detailDict, selectedPrograms, downloadHelper, progressAlert, progressView;
+@synthesize detailDict, selectedPrograms, downloadHelper, progressAlert, progressView, dialogAlert;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receiveNotification:)
+                                                 selector:@selector(trackProgressChanged:)
                                                      name:@"DownloadingAudio"
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(audioDone:)
                                                      name:@"AudioDone"
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(totalProgressChanged:)
+                                                     name: @"TotalProgress"
+                                                   object:nil];
+       
     }
     return self;
 }
@@ -51,41 +55,45 @@
     UIBarButtonItem *downloadButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(downloadButtonAction)];
     self.navigationItem.rightBarButtonItem = downloadButton;
     
-    progressAlert = [[UIAlertView alloc] initWithTitle: @"Programs Downloading" message: @""                                                        delegate: self cancelButtonTitle: nil otherButtonTitles: nil];
-    progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(30.0f, 80.0f, 225.0f, 90.0f)];
-    [progressAlert addSubview:progressView];
-    [progressView setProgressViewStyle: UIProgressViewStyleBar];
-    [progressAlert addSubview:progressView];
+    progressView = [[DownloadProgressView alloc] initWithFrame:CGRectMake(0, 0, 290, 200)];
+    progressAlert = [[RNBlurModalView alloc] initWithView: progressView];
+    
     isProgressShowing = NO;
     
 }
 -(void)downloadButtonAction{
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Download Programs"
+    dialogAlert = [[UIAlertView alloc] initWithTitle:@"Download Programs"
                                                       message:@"Would you like to download the selected programs to 'My Programs'?"
                                                      delegate:self
                                             cancelButtonTitle:@"No"
                                             otherButtonTitles:@"Yes", nil];
-    [message show];
+    [dialogAlert show];
 }
 -(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == alertView.cancelButtonIndex) {
-        NSLog(@"Cancelled");
-    }else{
+    if ([alertView.title isEqualToString:@"Download Programs"]) {
         
-        NSLog(@"Sending selected programs to Download Helper");
-        //sort and send programs to download to the download helper
-        NSArray *sortedKeys = [[selectedPrograms allKeys] sortedArrayUsingSelector: @selector(compare:)];
-        NSMutableArray *sortedValues = [NSMutableArray array];
-        for (NSString *key in sortedKeys)
-            [sortedValues addObject: [selectedPrograms objectForKey: key]];
-        [downloadHelper downloadAudioFromPrograms: sortedValues];
-        
+        if (buttonIndex == alertView.cancelButtonIndex) {
+            NSLog(@"Cancelled");
+        }else{
+            
+            NSLog(@"Sending selected programs to Download Helper");
+            //sort and send programs to download to the download helper
+            NSArray *sortedKeys = [[selectedPrograms allKeys] sortedArrayUsingSelector: @selector(compare:)];
+            NSMutableArray *sortedValues = [NSMutableArray array];
+            for (NSString *key in sortedKeys)
+                [sortedValues addObject: [selectedPrograms objectForKey: key]];
+            [downloadHelper downloadAudioFromPrograms: sortedValues];
+            [dialogAlert dismissWithClickedButtonIndex:0 animated:YES];
+            [progressAlert show];
+            isProgressShowing = YES;
+            
+        }
     }
     
 }
 
-- (void) receiveNotification:(NSNotification*) notification{
+- (void) trackProgressChanged:(NSNotification*) notification{
     
     // Create the progress bar and add it to the alert
     if(!isProgressShowing){
@@ -93,16 +101,25 @@
         isProgressShowing = YES;
     }
     NSDictionary * userInfo = notification.userInfo;
-    [progressAlert setMessage:[userInfo objectForKey:@"message"]];
+    //NSLog(@"%@", [userInfo objectForKey:@"message"]);
+    [progressView setMessage:[userInfo objectForKey:@"message"]];
     float percent = [[userInfo objectForKey:@"percent"] floatValue];
     [progressView setProgress:percent];
 
 }
 
--(void)audioDone{
-    [progressAlert dismissWithClickedButtonIndex:0 animated:YES];
+-(void)audioDone:(NSNotification*) notification{
+    //[progressAlert dismissWithClickedButtonIndex:0 animated:YES];
+    [progressAlert hide];
     isProgressShowing = NO;
+    [[self navigationController] popToRootViewControllerAnimated:YES];
 }
+-(void) totalProgressChanged:(NSNotification*) notification{
+    float progress = [[notification object] floatValue];
+    //[totProgressView setProgress:progress];
+    [progressView setTotalProgress:progress];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

@@ -10,5 +10,6 @@
 
 @interface CountriesViewController : UITableViewController
 
-@property ( strong, nonatomic) NSArray * regionArray;
+//@property ( strong, nonatomic) NSArray * regionArray;
+@property (strong, nonatomic) NSDictionary * subregions;
 @end

@@ -9,8 +9,9 @@
 #import "MainMenuViewController.h"
 #import "ContinentsViewController.h"
 #import "DataAccessLayer.h"
+#import "MyProgramsViewController.h"
 
-#define LOAD_DATABASE 1
+#define LOAD_DATABASE 0
 
 
 #define BTN_DOWNLOAD        CGRectMake(20, 163, 136, 44)
@@ -34,6 +35,12 @@
     self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
     self.title = @"Main Menu";
     
+    //initial database copy
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
+       
+    }
+    
+    
     UIButton *btnDownload = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [btnDownload setFrame:BTN_DOWNLOAD];
     [btnDownload setTitle:@"Download" forState:UIControlStateNormal];
@@ -52,9 +59,10 @@
     [btnPlay addTarget:self action:@selector(playButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
     
+//    //Used only for loading the database from json feeds
     
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonAction)];
-    self.navigationItem.rightBarButtonItem = addButton;
+//    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonAction)];
+//    self.navigationItem.rightBarButtonItem = addButton;
     
     [self.view addSubview:btnDownload];
     [self.view addSubview:btnPlay];
@@ -64,22 +72,17 @@
 
 -(void) downloadButtonTapped{
     ContinentsViewController * vc = [[ContinentsViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:NO];
+    [self.navigationController pushViewController:vc animated:YES];
     
 }
 -(void) playButtonTapped{
-    activityView.center= CGPointMake(self.view.center.x, self.view.center.y-100);
-    
-    [self.view addSubview:activityView];
-    [activityView startAnimating];
-    activityView.hidden = NO;
-
-   
-    [activityView performSelector:@selector(stopAnimating) withObject:nil afterDelay:3];
+    MyProgramsViewController * vc = [[MyProgramsViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void) shareButtonTapped{
-    
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Share" message:@"Share not yet implemented" delegate:self cancelButtonTitle:@"Close" otherButtonTitles: nil];
+    [alert show];
 }
 -(void) addButtonAction{
 

@@ -21,5 +21,6 @@
 -(NSArray*) getAllPrograms;
 -(Program*) getProgramById:(NSInteger) grn_id;
 -(BOOL) updateProgramWithId: (NSInteger) gid;
+-(NSArray* )getDownloadedPrograms;
 -(BOOL) isProgramStructureStored:(Program*)program;
 @end

@@ -73,6 +73,7 @@
     // Configure the cell...
     Location * loc = [self.locationArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = loc.defaultName;
+    cell.imageView.image = [DataAccessLayer getImageById:loc.grn_id];
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
@@ -129,9 +130,21 @@
      // Pass the selected object to the new view controller.
     
     
-    Location * continent = [[self locationArray] objectAtIndex:[indexPath row]];
     
-    countriesViewController.regionArray = [continent.relatedLocations allObjects];
+    Location * continent = [[self locationArray] objectAtIndex:[indexPath row]];
+    NSMutableDictionary * subregions = [[NSMutableDictionary alloc] init];
+    for(Location * region in [continent.relatedLocations allObjects]){
+        NSMutableArray * countryArray = [[NSMutableArray alloc]init];
+        for(Location * country in [region.relatedLocations allObjects]){
+            if ([country.locationType isEqualToString: @"Country"]) {
+                [countryArray addObject:country];
+            }
+            [subregions setObject:countryArray forKey:region.defaultName];
+        }
+        
+    }
+    countriesViewController.subregions = subregions;
+    //.regionArray = [continent.relatedLocations allObjects];
      [self.navigationController pushViewController:countriesViewController animated:YES];
     
 }

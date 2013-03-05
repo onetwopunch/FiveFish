@@ -21,7 +21,11 @@
 +(NSArray *) getAllLocations;
 +(NSArray *) getContinents;
 +(Program* )getProgramById: (NSInteger) grn_id;
-
++(UIImage*)getFlagImageByCode: (NSString*) code;
++(UIImage*) getImageById: (NSNumber*)grn_id;
++(NSDictionary*)getDownloadedProgramsByLanguage;
++(NSArray*) getDownloadedPrograms;
++(NSArray*) getSortedTracks: (Program*) program;
 //------------------------------------
 //Initial setup
 +(BOOL) initial_setLocationStructure;

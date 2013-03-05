@@ -34,16 +34,26 @@ static ProgramRepository * sharedRepo = nil;
 -(BOOL) updateProgramWithId: (NSInteger) gid{
     
     BOOL isYoutubeNull = NO;
+    BOOL oldVersion = NO;
     NSDictionary * progFromWeb = [WebServices getProgramStructureFromId:gid];
-    
+    if ([[progFromWeb allKeys] containsObject:@"error"]) {
+        progFromWeb = [WebServices getProgramStructureFromIdCompat:gid];
+        oldVersion = YES;
+    }
     //get values from dictionary
-    NSLog(@"%@", progFromWeb);
+    NSLog(@"Program from Web %@", progFromWeb);
     NSString * baseAudio = [progFromWeb objectForKey:@"baseAudio"];
     NSString * baseHdpi = [progFromWeb objectForKey:@"baseHdpi"];
     NSString * baseMdpi = [progFromWeb objectForKey:@"baseMdpi"];
     NSString * basePic = [progFromWeb objectForKey: @"basePic"];
     NSInteger grn_id = [[progFromWeb objectForKey:@"grnId"] intValue];
-    NSArray * audioTracks = [progFromWeb objectForKey:@"tracks"];
+    NSArray *audioTracks;
+    if(oldVersion){
+        audioTracks = [progFromWeb objectForKey:@"tracks"];
+    }else{
+        NSDictionary * aDict = [progFromWeb objectForKey:@"tracks"];
+        audioTracks = [aDict objectForKey:@"track"];
+    }
     NSString * youtube = [progFromWeb objectForKey:@"youTube"];
     if (![youtube respondsToSelector:@selector(isEqualToString:)]) {
         isYoutubeNull= YES;
@@ -55,7 +65,7 @@ static ProgramRepository * sharedRepo = nil;
     [program setBaseHdpi:baseHdpi];
     [program setBaseMdpi:baseMdpi];
     [program setBasePic:basePic];
-
+    
     if (!isYoutubeNull) {
         VideoTrack *vTrack = [NSEntityDescription insertNewObjectForEntityForName:@"VideoTrack" inManagedObjectContext:managedObjectContext];
         MediaType * mType = [NSEntityDescription insertNewObjectForEntityForName:@"MediaType" inManagedObjectContext:managedObjectContext];
@@ -98,7 +108,7 @@ static ProgramRepository * sharedRepo = nil;
         return NO;
     }
     return YES;
-
+    
 }
 
 -(BOOL) removeProgram: (Program*)prog{
@@ -116,10 +126,10 @@ static ProgramRepository * sharedRepo = nil;
     NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
     if([results count] >1){
         NSLog(@"More than one program returned for the specified id");
-        return nil;
+        //return nil;
     }
     //returns the one and only language with that id
-    return ([results count]==0)? nil: [results objectAtIndex:0];
+    return [results objectAtIndex:0];//([results count]==0)? nil: [results objectAtIndex:0];
 }
 
 -(NSArray*) getAllPrograms{
@@ -139,6 +149,19 @@ static ProgramRepository * sharedRepo = nil;
     return [[NSArray alloc]initWithArray: results];
     
 }
+
+-(NSArray* )getDownloadedPrograms{
+    NSEntityDescription * program = [NSEntityDescription entityForName:@"Program"
+                                                inManagedObjectContext:managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"downloaded == %@", [NSNumber numberWithBool:YES]];
+    [request setPredicate:pred];
+    [request setEntity:program];
+    NSError * error;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+    return results;
+}
+
 
 //Structure is stored when the program is seen by the user. This allows the user to look at the structure of the program
 //again without being on the internet

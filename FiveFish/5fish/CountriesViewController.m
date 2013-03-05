@@ -9,13 +9,14 @@
 #import "CountriesViewController.h"
 #import "Location.h"
 #import "LanguagesViewController.h"
+#import "DataAccessLayer.h"
 
 @interface CountriesViewController ()
 
 @end
 
 @implementation CountriesViewController
-@synthesize regionArray;
+@synthesize subregions;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,14 +45,14 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return [regionArray count];
+    return [[subregions allKeys] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    Location * region = [regionArray objectAtIndex:section];
-    return [region.relatedLocations count];
+    NSString * key = [[subregions allKeys] objectAtIndex:section];
+    return [[subregions objectForKey:key] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -66,16 +67,22 @@
     }
     
     // Configure the cell...
-    Location * region = [regionArray objectAtIndex:[indexPath section]];
-    Location * country = [[region.relatedLocations allObjects] objectAtIndex:[indexPath row]];
+    //Location * region = [regionArray objectAtIndex:[indexPath section]];
+    NSString * key = [[subregions allKeys] objectAtIndex:[indexPath section]];
+//    Location * country = [[region.relatedLocations allObjects] objectAtIndex:[indexPath row]];
+    NSArray * countries = [subregions objectForKey:key];
+    Location * country = [countries objectAtIndex:[indexPath row]];
     cell.textLabel.text = country.defaultName;
+    cell.imageView.image = [DataAccessLayer getFlagImageByCode:country.countryCode];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    Location *region = [regionArray objectAtIndex:section];
-    return region.defaultName;
+//    Location *region = [regionArray objectAtIndex:section];
+//    return region.defaultName;
+    NSArray * keys = [subregions allKeys];
+    return [keys objectAtIndex:section];
 }
 
 #pragma mark - Table view delegate
@@ -85,8 +92,10 @@
     // Navigation logic may go here. Create and push another view controller.
     
      LanguagesViewController *detailViewController = [[LanguagesViewController alloc] init];
-    Location * region = [regionArray objectAtIndex:[indexPath section]];
-    Location * country = [[region.relatedLocations allObjects] objectAtIndex:[indexPath row]];
+    //Location * region = [regionArray objectAtIndex:[indexPath section]];
+    NSString * key = [[subregions allKeys] objectAtIndex:[indexPath section]];
+    NSArray * countries= [subregions objectForKey:key];
+    Location * country = [countries objectAtIndex:[indexPath row]];//[[region.relatedLocations allObjects] objectAtIndex:[indexPath row]];
     NSArray *languages = [country.languages allObjects];
     [detailViewController setLanguageArray:languages];
     
