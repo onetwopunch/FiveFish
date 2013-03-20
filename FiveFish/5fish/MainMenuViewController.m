@@ -10,20 +10,17 @@
 #import "ContinentsViewController.h"
 #import "DataAccessLayer.h"
 #import "MyProgramsViewController.h"
+#import "ShareMenuViewController.h"
 
 #define LOAD_DATABASE 0
 
-
-#define BTN_DOWNLOAD        CGRectMake(20, 163, 136, 44)
-#define BTN_SHARE           CGRectMake(164, 163, 136, 44)
-#define BTN_MY_PROGRAMS     CGRectMake(20, 230, 280, 44)
 
 @interface MainMenuViewController ()
 
 @end
 
 @implementation MainMenuViewController
-@synthesize activityView;
+@synthesize activityView, splash;
 
 
 
@@ -35,30 +32,29 @@
     self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
     self.title = @"Main Menu";
     
-    //initial database copy
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
-       
-    }
     
     
-    UIButton *btnDownload = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btnDownload setFrame:BTN_DOWNLOAD];
-    [btnDownload setTitle:@"Download" forState:UIControlStateNormal];
+    UIButton *btnDownload = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage * imgDownload = [UIImage imageNamed:@"download.png"];
+    [btnDownload setFrame:CGRectMake(5, 5, imgDownload.size.width, imgDownload.size.height)];
+    [btnDownload setImage: imgDownload forState:UIControlStateNormal];
     [btnDownload addTarget:self action:@selector(downloadButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton *btnShare = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btnShare setFrame:BTN_SHARE];
-    [btnShare setTitle:@"Share" forState:UIControlStateNormal];
-    [btnShare addTarget:self action:@selector(shareButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    
-    UIButton *btnPlay = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btnPlay setFrame:BTN_MY_PROGRAMS];
+    UIButton *btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *imgPlay = [UIImage imageNamed:@"myprograms.png"];
+    [btnPlay setFrame:CGRectMake(5, 140, imgPlay.size.width, imgPlay.size.height)];
+    [btnPlay setImage:imgPlay forState:UIControlStateNormal];
     [btnPlay setTitle:@"My Programs" forState:UIControlStateNormal];
     [btnPlay addTarget:self action:@selector(playButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
-    
+    UIButton *btnShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *imgShare = [UIImage imageNamed:@"share.png"];
+    [btnShare setFrame: CGRectMake(5, 285, imgShare.size.width, imgShare.size.height)];
+    [btnShare setBackgroundColor:[UIColor clearColor]];
+    [btnShare setImage:imgShare forState:UIControlStateNormal];
+    [btnShare addTarget:self action:@selector(shareButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+
 //    //Used only for loading the database from json feeds
     
 //    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonAction)];
@@ -67,9 +63,33 @@
     [self.view addSubview:btnDownload];
     [self.view addSubview:btnPlay];
     [self.view addSubview:btnShare];
+
+    splash = [[UIImageView alloc] initWithImage:[UIImage imageNamed: @"five_fish_splash.png"]];
+    [self animate];
     
 }
-
+-(void)viewDidAppear:(BOOL)animated{
+    [self animate];
+}
+-(void)viewDidDisappear:(BOOL)animated{
+    splash.frame = self.navigationController.view.frame;
+}
+-(void)animate{
+    
+    splash.frame = self.navigationController.view.frame;
+    [self.view addSubview:splash];
+    [UIView animateWithDuration:0.6f
+                          delay:0.0f
+                        options: nil
+                        animations:^{
+                         [splash setFrame:CGRectMake(150.0, self.navigationController.view.frame.origin.y,
+                                                     self.navigationController.view.frame.size.width,
+                                                     self.navigationController.view.frame.size.height)];
+                         
+                         
+                     }
+                     completion:nil];
+}
 -(void) downloadButtonTapped{
     ContinentsViewController * vc = [[ContinentsViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
@@ -81,8 +101,8 @@
 }
 
 -(void) shareButtonTapped{
-    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Share" message:@"Share not yet implemented" delegate:self cancelButtonTitle:@"Close" otherButtonTitles: nil];
-    [alert show];
+    ShareMenuViewController * vc = [[ShareMenuViewController alloc]initWithStyle:UITableViewStyleGrouped];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 -(void) addButtonAction{
 

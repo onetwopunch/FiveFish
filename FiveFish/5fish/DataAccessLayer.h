@@ -14,13 +14,12 @@
 
 @interface DataAccessLayer : NSObject
 
-+(NSArray *) getLanguageNamesFromServer;
-+(NSArray *) getLanguageNamesFromFile;
 +(NSArray *) getAllLanguageNames;
 +(NSArray *) getAllLanguages;
 +(NSArray *) getAllLocations;
 +(NSArray *) getContinents;
 +(Program* )getProgramById: (NSInteger) grn_id;
++(Program* )getProgramById:(NSInteger)grn_id JsonDictionary:(NSDictionary*) jsonDict;
 +(UIImage*)getFlagImageByCode: (NSString*) code;
 +(UIImage*) getImageById: (NSNumber*)grn_id;
 +(NSDictionary*)getDownloadedProgramsByLanguage;

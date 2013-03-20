@@ -16,11 +16,9 @@
 
 +(ProgramRepository*)sharedRepo; //Singleton
 
--(BOOL) addProgram: (Program*)prog;
--(BOOL) removeProgram: (Program*)prog;
 -(NSArray*) getAllPrograms;
 -(Program*) getProgramById:(NSInteger) grn_id;
--(BOOL) updateProgramWithId: (NSInteger) gid;
+-(BOOL) updateProgramWithId: (NSInteger) gid JsonDictionary:(NSDictionary*) jsonDict;
 -(NSArray* )getDownloadedPrograms;
 -(BOOL) isProgramStructureStored:(Program*)program;
 @end

@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSNumber * totalSize;
 @property (nonatomic, retain) NSSet *audioTracks;
 @property (nonatomic, retain) NSSet *languages;
+@property (nonatomic, retain) NSString * trackJsonString;
 @property (nonatomic, retain) ProgramType *type;
 @property (nonatomic, retain) VideoTrack *videoTrack;
 

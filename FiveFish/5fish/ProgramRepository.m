@@ -31,35 +31,50 @@ static ProgramRepository * sharedRepo = nil;
 	return sharedRepo;
 }
 
--(BOOL) updateProgramWithId: (NSInteger) gid{
+-(BOOL) updateProgramWithId: (NSInteger) gid JsonDictionary:(NSDictionary*) jsonDict{
     
     BOOL isYoutubeNull = NO;
     BOOL oldVersion = NO;
-    NSDictionary * progFromWeb = [WebServices getProgramStructureFromId:gid];
-    if ([[progFromWeb allKeys] containsObject:@"error"]) {
-        progFromWeb = [WebServices getProgramStructureFromIdCompat:gid];
-        oldVersion = YES;
+    NSDictionary * progFromJson;
+    if (jsonDict ==nil) {
+        //get json from web
+        progFromJson = [WebServices getProgramStructureFromId:gid];
+        if ([[progFromJson allKeys] containsObject:@"error"]) {
+            progFromJson = [WebServices getProgramStructureFromIdCompat:gid];
+            oldVersion = YES;
+        }
+    } else {
+        //get json from bluetooth
+        progFromJson = jsonDict;
     }
+    //Create jsonString for tracks. This is to transfer tracks via bluetooth
+    NSError * error;
+    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:progFromJson options:nil error:&error];
+    NSString * jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    
     //get values from dictionary
-    NSLog(@"Program from Web %@", progFromWeb);
-    NSString * baseAudio = [progFromWeb objectForKey:@"baseAudio"];
-    NSString * baseHdpi = [progFromWeb objectForKey:@"baseHdpi"];
-    NSString * baseMdpi = [progFromWeb objectForKey:@"baseMdpi"];
-    NSString * basePic = [progFromWeb objectForKey: @"basePic"];
-    NSInteger grn_id = [[progFromWeb objectForKey:@"grnId"] intValue];
+    NSLog(@"Program from Web %@", progFromJson);
+    NSString * baseAudio = [progFromJson objectForKey:@"baseAudio"];
+    NSString * baseHdpi = [progFromJson objectForKey:@"baseHdpi"];
+    NSString * baseMdpi = [progFromJson objectForKey:@"baseMdpi"];
+    NSString * basePic = [progFromJson objectForKey: @"basePic"];
+    NSInteger grn_id = [[progFromJson objectForKey:@"grnId"] intValue];
     NSArray *audioTracks;
     if(oldVersion){
-        audioTracks = [progFromWeb objectForKey:@"tracks"];
+        audioTracks = [progFromJson objectForKey:@"tracks"];
     }else{
-        NSDictionary * aDict = [progFromWeb objectForKey:@"tracks"];
+        NSDictionary * aDict = [progFromJson objectForKey:@"tracks"];
         audioTracks = [aDict objectForKey:@"track"];
     }
-    NSString * youtube = [progFromWeb objectForKey:@"youTube"];
+    NSString * youtube = [progFromJson objectForKey:@"youTube"];
     if (![youtube respondsToSelector:@selector(isEqualToString:)]) {
         isYoutubeNull= YES;
     }
     
     Program *program = [self getProgramById:grn_id];
+    
+    [program setTrackJsonString:jsonString];
     
     [program setBaseAudio:baseAudio];
     [program setBaseHdpi:baseHdpi];
@@ -102,7 +117,6 @@ static ProgramRepository * sharedRepo = nil;
     program.downloaded = [NSNumber numberWithBool:YES];
     [program setAudioTracks:aTrackSet];
     
-    NSError *error;
     if (![managedObjectContext save:&error]) {
         NSLog(@"Program Update Failed: %@", error);
         return NO;
@@ -111,9 +125,7 @@ static ProgramRepository * sharedRepo = nil;
     
 }
 
--(BOOL) removeProgram: (Program*)prog{
-    return YES;
-}
+
 
 -(Program*) getProgramById:(NSInteger) grn_id{
     NSEntityDescription * program = [NSEntityDescription entityForName:@"Program" inManagedObjectContext:managedObjectContext];

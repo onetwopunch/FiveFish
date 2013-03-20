@@ -27,5 +27,6 @@
 @dynamic languages;
 @dynamic type;
 @dynamic videoTrack;
+@dynamic trackJsonString;
 
 @end

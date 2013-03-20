@@ -19,7 +19,10 @@
 +(NSDictionary *) getAllLocations;
 +(NSDictionary *) getAllLanguages;
 
-//+(NSOperationQueue*) sharedQueue;
++(NSString*)createAudioDir;
++(NSString*)createPictureDir;
++(NSString*)createProgramDir:(NSString*)basePath WithId: (NSInteger) grn_id;
+
 
 -(void) downloadTracksFromProgramArray:(NSArray*) programs;
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "DataAccessLayer.h"
-#import "JSONAccess.h"
 #import "LanguageRepository.h"
 #import "LocationRepository.h"
 #import "ProgramRepository.h"
@@ -29,52 +28,6 @@
         path = @"placeholder.png";
     
     return [UIImage imageNamed:path];
-}
-+(NSArray *) getLanguageNamesFromFile{
-    
-    JSONAccess *jsonAccess = [[JSONAccess alloc] init];
-    NSDictionary * jsonDict = [jsonAccess getLanguageDataFromJSONFile];
-    if (jsonDict==nil) {
-        return [[NSArray alloc]initWithObjects:@"No", @"Data", @"Available", nil];
-
-    }else{
-
-        NSDictionary * languageList = [jsonDict objectForKey:@"languageList"];
-        
-        NSArray * pair = [languageList objectForKey:@"pair"];
-        
-        NSMutableArray * nameArray = [[NSMutableArray alloc] init];
-        for (NSDictionary * dict in pair) {
-            [nameArray addObject:[dict objectForKey:@"value"]];
-        }
-        
-        jsonAccess = nil;
-        return nameArray;
-
-    }
-}
-+(NSArray *) getLanguageNamesFromServer{
-    JSONAccess *jsonAccess = [[JSONAccess alloc] init];
-    NSDictionary * jsonDict = [jsonAccess getLanguageDataFromJSON];
-    
-    
-    if (jsonDict==nil) {
-        return [[NSArray alloc]initWithObjects:@"No", @"Data", @"Available", nil];
-        NSLog(@"JSON dict is null");
-    }else{
-        NSDictionary * languageList = [jsonDict objectForKey:@"languageList"];
-        
-        
-        NSArray * pair = [languageList objectForKey:@"pair"];
-        
-        NSMutableArray * nameArray = [[NSMutableArray alloc] init];
-        for (NSDictionary * dict in pair) {
-            [nameArray addObject:[dict objectForKey:@"value"]];
-        }
-        
-
-        return nameArray;
-    }
 }
 
 +(NSArray *) getAllLanguageNames
@@ -99,16 +52,26 @@
 +(NSArray *) getContinents{
     return [[LocationRepository sharedRepo] getContinents];
 }
+
 +(Program* )getProgramById: (NSInteger) grn_id{
     //We dont want to store programs in the repo more than once, so we check if the structure is downloaded
     Program * program = [[ProgramRepository sharedRepo] getProgramById:grn_id];
     if(![[ProgramRepository sharedRepo] isProgramStructureStored:program]){
-        [[ProgramRepository sharedRepo] updateProgramWithId:grn_id];
+        [[ProgramRepository sharedRepo] updateProgramWithId:grn_id JsonDictionary:nil];
         program = [[ProgramRepository sharedRepo] getProgramById: grn_id];
     }
     return program;
 }
 
+//allows us to pass a json string to the repo to handle bluetooth receive
++(Program* )getProgramById:(NSInteger)grn_id JsonDictionary:(NSDictionary*) jsonDict{
+    Program * program = [[ProgramRepository sharedRepo] getProgramById:grn_id];
+    if(![[ProgramRepository sharedRepo] isProgramStructureStored:program]){
+        [[ProgramRepository sharedRepo] updateProgramWithId:grn_id JsonDictionary:jsonDict];
+        program = [[ProgramRepository sharedRepo] getProgramById: grn_id];
+    }
+    return program;
+}
 +(NSArray*) getDownloadedPrograms{
     return [[ProgramRepository sharedRepo] getDownloadedPrograms];
 }

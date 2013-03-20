@@ -85,6 +85,7 @@
     NSArray * programs = [programsByLanguage objectForKey:key];
     Program * prog = [programs objectAtIndex: [indexPath row]];
     cell.textLabel.text = prog.title;
+    cell.imageView.image = [UIImage imageNamed:prog.type.pictureUrl];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }

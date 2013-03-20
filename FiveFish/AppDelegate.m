@@ -143,13 +143,12 @@
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"FiveFish.sqlite"];
     
     
-    if( ![[NSFileManager defaultManager]
-          fileExistsAtPath:[storeURL path]] ) {
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]] ) {
         // If there’s no Data Store present (which is the case when the app first launches), identify the sqlite file we added in the Bundle Resources, copy it into the Documents directory, and make it the Data Store.
-//        NSString *sqlitePath = [[NSBundle mainBundle]
-//                                pathForResource:@"FiveFish1" ofType:@"sqlite"
-//                                inDirectory:nil];
-        NSString *sqlitePath = [[[NSBundle mainBundle] pathsForResourcesOfType:@"sqlite" inDirectory:nil] objectAtIndex:1];
+        NSString *sqlitePath = [[NSBundle mainBundle]
+                                pathForResource:@"FiveFishDB" ofType:@"sqlite"
+                                inDirectory:nil];
+       // NSString *sqlitePath = [[[NSBundle mainBundle] pathsForResourcesOfType:@"sqlite" inDirectory:nil] objectAtIndex:1];
         NSLog(@"ALL: %@",[[NSBundle mainBundle] pathsForResourcesOfType:@"sqlite" inDirectory:nil]);
         NSLog(@"SQL PATH %@,", sqlitePath);
         NSError *anyError = nil;

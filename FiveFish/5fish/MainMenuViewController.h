@@ -12,5 +12,5 @@
     
 }
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-
+@property (nonatomic, strong) UIImageView * splash;
 @end

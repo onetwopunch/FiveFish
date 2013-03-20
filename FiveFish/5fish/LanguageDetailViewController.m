@@ -7,6 +7,7 @@
 //
 
 #import "LanguageDetailViewController.h"
+#import "YoutubeViewController.h"
 #import "Program.h"
 #import "ProgramType.h"
 #import "DataAccessLayer.h"
@@ -252,6 +253,13 @@
             selectedCell.accessoryType = UITableViewCellAccessoryNone;
         }
         NSLog(@"%@", [selectedPrograms allKeys]);
+    } else if([indexPath section]==SAMPLE){
+        Sample * sample = [detailDict objectForKey:@"Sample"];
+        if (sample.youtube != nil) {
+            YoutubeViewController *vc = [[YoutubeViewController alloc]init];
+            vc.youtubeUrl = [@"http://www.youtube.com/watch?v=" stringByAppendingString:sample.youtube];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 
     
