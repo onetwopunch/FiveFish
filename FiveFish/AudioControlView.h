@@ -5,6 +5,9 @@
 //  Created by Ryan Canty on 3/2/13.
 //  Copyright (c) 2013 GRN. All rights reserved.
 //
+/*
+ This View gives the template of an Audio player for which the view controller adds actions. It is done programmatically to avoid compatibility isues with the larger screen of iPhone 5+
+ */
 
 #import <UIKit/UIKit.h>
 
@@ -12,9 +15,6 @@
     BOOL isPlaying;
 }
 
-/*
- This View gives the template of an Audio player for the view controller to add actions to
- */
 
 @property (strong, nonatomic) UIButton * btnPlay;
 @property (strong, nonatomic) UIButton * btnNext;

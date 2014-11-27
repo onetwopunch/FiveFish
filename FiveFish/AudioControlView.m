@@ -47,7 +47,7 @@
         [highVol setImage:[UIImage imageNamed:@"volume_high.png"]];
                 
         //Bottom Setup
-        GlossyView *bottom = [[GlossyView alloc] initWithFrame:CGRectMake(frame.origin.x, 160, frame.size.width, 100)];
+        GlossyView *bottom = [[GlossyView alloc] initWithFrame:CGRectMake(frame.origin.x, 160, frame.size.width, 200)];
         
         btnPrevious = [[UIButton alloc] initWithFrame:CGRectMake(25, BTN_HEIGHT, 30, 30)];
         [btnPrevious setImage:[UIImage imageNamed:@"previous.png"] forState:UIControlStateNormal];

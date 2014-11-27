@@ -10,15 +10,18 @@
 #import "DataAccessLayer.h"
 #import "Program.h"
 #import "AudioTrack.h"
-
+#import <AVFoundation/AVPlayerItem.h>
+#import <CoreMedia/CMTime.h>
 
 @implementation AudioHelper
 @synthesize audioServices;
+
 
 -(id)init{
     self = [super init];
     if(self){
         audioServices = [[AudioServices alloc] init];
+        currentLanguageSample = 0;
     }
     return self;
 }
@@ -94,5 +97,45 @@
 }
 -(BOOL)isPlaying{
     return [audioServices isPlaying];
+}
+
+-(BOOL)playAudioLanguageSample:(NSInteger)languageId{
+    if (audioServices.samplePlayer == nil) {
+        NSString * baseUrl = @"http://files.globalrecordings.net/audio/language/mp3/sample-";
+        NSString * formattedUrl = [NSString stringWithFormat:@"%@%d.mp3?app=7&v=1&i=en",baseUrl, languageId];
+        NSLog(@"Sample Language url: %@", formattedUrl);
+        audioServices.samplePlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:formattedUrl]];
+        audioServices.samplePlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:audioServices.samplePlayer.currentItem];
+        CMTime time = audioServices.samplePlayer.currentItem.duration;
+        if (CMTimeGetSeconds(time)!=0.0f) {
+            NSLog(@"CurrentItem time: %f", CMTimeGetSeconds(time));
+            [audioServices.samplePlayer play];
+            currentLanguageSample = languageId;
+            return YES;
+        } else {
+            NSLog(@"No Sample");
+            audioServices.samplePlayer = nil;
+            return NO;
+        }
+    } else {
+        [audioServices.samplePlayer play];
+        return YES;
+    }
+}
+-(void)stopAudioLanguageSample{
+    [audioServices.samplePlayer pause];
+    audioServices.samplePlayer = nil;
+}
+-(void)itemDidFinishPlaying {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SampleFinished" object:nil];
+}
+-(BOOL)sampleIsFinished{
+ 
+    if (CMTIME_COMPARE_INLINE(audioServices.samplePlayer.currentTime, ==, audioServices.samplePlayer.currentItem.duration)) {
+        return YES;
+    }else{
+        return NO;
+    }
 }
 @end

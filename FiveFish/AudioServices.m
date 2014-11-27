@@ -13,7 +13,7 @@
 #import "Program.h"
 
 @implementation AudioServices
-@synthesize player, tracksToBePlayed;
+@synthesize player, tracksToBePlayed, samplePlayer;
 
 
 -(void)setProgram:(NSInteger)gid{

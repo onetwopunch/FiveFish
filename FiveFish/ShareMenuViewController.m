@@ -9,6 +9,8 @@
 #import "ShareMenuViewController.h"
 #import <GameKit/GameKit.h>
 #import "BluetoothViewController.h"
+#import "FacebookViewController.h"
+#import <Twitter/Twitter.h>
 
 #define kBluetooth 0
 #define kFacebook 1
@@ -17,7 +19,7 @@
 
 
 @implementation ShareMenuViewController
-@synthesize btHelper;
+
 
 GKPeerPickerController *picker;
 
@@ -40,6 +42,7 @@ GKPeerPickerController *picker;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -81,14 +84,14 @@ GKPeerPickerController *picker;
         {
             cell.textLabel.text = @"Facebook";
             cell.imageView.image = [UIImage imageNamed:@"facebook.png"];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.accessoryType = UITableViewCellAccessoryNone;
             break;
         }
             case kTwitter:
         {
             cell.textLabel.text = @"Twitter";
             cell.imageView.image = [UIImage imageNamed:@"twitter.png"];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.accessoryType = UITableViewCellAccessoryNone;
             break;
         }
             
@@ -103,21 +106,22 @@ GKPeerPickerController *picker;
 - (void)peerPickerController:(GKPeerPickerController *)picker
               didConnectPeer:(NSString *)peerID
                    toSession:(GKSession *) session {
-    //[btHelper connect:session];
     
-    picker.delegate = nil;
     [picker dismiss];
+    picker.delegate = nil;
+    picker = nil;
+    
     
     BluetoothViewController * vc = [[BluetoothViewController alloc] initWithStyle:UITableViewStylePlain];
+    vc.btHelper = [[BluetoothHelper alloc] init];
+    [vc.btHelper connect:session];
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker
 {
     [picker dismiss];
+    picker = nil;
     picker.delegate = nil;
-    BluetoothViewController * vc = [[BluetoothViewController alloc] initWithStyle:UITableViewStylePlain];
-    [self.navigationController pushViewController:vc animated:YES];
-
 }
 
 
@@ -127,6 +131,9 @@ GKPeerPickerController *picker;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Navigation logic may go here. Create and push another view controller.
+    NSString *postTxt = @"I just heard an amazing message from the 5Fish iOS app in my language! Go to http://5fish.mobi to hear it for yourself!";
+    NSArray *versionCompatibility = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    NSInteger sysVersion = [[versionCompatibility objectAtIndex:0] intValue];
     switch ([indexPath row]) {
         case kBluetooth:
         {
@@ -139,9 +146,47 @@ GKPeerPickerController *picker;
             break;
         }
         case kFacebook:
+        {
+            // if it is available to us, we will post using the native dialog
+            [[self.tableView cellForRowAtIndexPath:indexPath] setSelected:NO];            
+            if(sysVersion >= 6){
+                
+          //      [FBNativeDialogs presentShareDialogModallyFrom:self initialText:postTxt image:nil url:nil                                                   handler:nil];
+                SLComposeViewController *fbViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                [fbViewController setInitialText:postTxt];
+                [fbViewController setCompletionHandler:^(SLComposeViewControllerResult result) {
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                }];
+                [self presentViewController:fbViewController animated:YES completion:nil];
+            } else {
+                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Facebook" message:@"Pease update to iOS 6 to use the Facebook feature." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+                [alert show];
+            }
             break;
+        }
         case kTwitter:
+        {
+            [[self.tableView cellForRowAtIndexPath:indexPath] setSelected:NO];
+            if (sysVersion >=6) {
+                
+                SLComposeViewController *tweetViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                // Set the initial tweet text. See the framework for additional properties that can be set.
+                [tweetViewController setInitialText:postTxt];
+                
+                // Create the completion handler block.
+                [tweetViewController setCompletionHandler:^(SLComposeViewControllerResult result) {
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                }];
+                
+                // Present the tweet composition view controller modally.
+                [self presentViewController:tweetViewController animated:YES completion:nil];
+
+            }else{
+                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Twitter" message:@"Please install Twitter from the App Store to tweet." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+                [alert show];
+            }
             break;
+        }
         default:
             break;
     }

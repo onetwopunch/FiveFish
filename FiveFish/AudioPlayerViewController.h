@@ -5,7 +5,9 @@
 //  Created by Ryan Canty on 3/2/13.
 //  Copyright (c) 2013 GRN. All rights reserved.
 //
-
+/*
+ Leverages the AudioHelper to access the AudioServices and play the program in order of the tracks.
+ */
 #import <UIKit/UIKit.h>
 #import "AudioControlView.h"
 #import "AudioHelper.h"

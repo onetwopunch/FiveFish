@@ -5,11 +5,15 @@
 //  Created by Ryan Canty on 3/2/13.
 //  Copyright (c) 2013 GRN. All rights reserved.
 //
-
+/*
+ This class gives the UI access to the AudioServices.
+ */
 #import <Foundation/Foundation.h>
 #import "AudioServices.h"
 
-@interface AudioHelper : NSObject
+@interface AudioHelper : NSObject{
+    NSInteger currentLanguageSample;
+}
 @property (strong, nonatomic) AudioServices *audioServices;
 
 -(void)queueTracksForProgramId:(NSInteger)gid;
@@ -30,4 +34,8 @@
 -(float) getCurrentTimeValue;
 -(float) getDurationValue;
 -(BOOL)isPlaying;
+-(BOOL)playAudioLanguageSample:(NSInteger)languageId;
+-(void)stopAudioLanguageSample;
+-(BOOL)sampleIsFinished;
+
 @end

@@ -199,7 +199,9 @@ NSString* const ACFileTransferUpdatedPeersNotification = @"ACFileTransferUpdated
 }
 
 -(BOOL)sendToPeers:(NSArray*)recipients {
-	if(!enabled) { return NO; }
+	if(!enabled) {
+        return NO;
+    }
 	for(NSData* packet in self.packets) {
 		NSError* error = nil;
 		[self.session sendData:packet toPeers:recipients withDataMode:GKSendDataReliable error:&error];
@@ -220,7 +222,9 @@ NSString* const ACFileTransferUpdatedPeersNotification = @"ACFileTransferUpdated
 
 	// Extract the data back into a dictioanry
 	NSDictionary* packet = [NSPropertyListSerialization propertyListWithData:data options:0 format:NULL error:nil];
-	if(packet == nil) { return; }
+	if(packet == nil) {
+        return;
+    }
 	
 	// Notify that we received a packet
 	[[NSNotificationCenter defaultCenter] postNotificationName:ACFileTransferPacketReceivedNotification object:self userInfo:packet];

@@ -342,6 +342,16 @@
 		776DE9D016C9E1970054F35A /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = 776DE9CF16C9E1970054F35A /* Language.m */; };
 		776DE9D316C9E1970054F35A /* VideoTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 776DE9D216C9E1970054F35A /* VideoTrack.m */; };
 		776DE9D616C9E1980054F35A /* AltName.m in Sources */ = {isa = PBXBuildFile; fileRef = 776DE9D516C9E1980054F35A /* AltName.m */; };
+		776FEE3116FAD8320084F547 /* BluetoothProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776FEE3016FAD8320084F547 /* BluetoothProgressView.m */; };
+		776FEE3B16FB95380084F547 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 776FEE3A16FB95370084F547 /* Accounts.framework */; };
+		776FEE3D16FB953E0084F547 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 776FEE3C16FB953E0084F547 /* Social.framework */; };
+		776FEE3F16FB954D0084F547 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 776FEE3E16FB954D0084F547 /* libsqlite3.dylib */; };
+		776FEE4116FB95720084F547 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 776FEE4016FB95720084F547 /* CoreLocation.framework */; };
+		776FEE4316FB957C0084F547 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 776FEE4216FB957C0084F547 /* AdSupport.framework */; };
+		776FEE5716FBC5890084F547 /* postfb.png in Resources */ = {isa = PBXBuildFile; fileRef = 776FEE5616FBC5890084F547 /* postfb.png */; };
+		776FEE5A1700D5D70084F547 /* tablePause.png in Resources */ = {isa = PBXBuildFile; fileRef = 776FEE581700D5D70084F547 /* tablePause.png */; };
+		776FEE5B1700D5D70084F547 /* tablePlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 776FEE591700D5D70084F547 /* tablePlay.png */; };
+		776FEE601700EF520084F547 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 776FEE5F1700EF520084F547 /* CoreMedia.framework */; };
 		779F59E516F69FBB004E177B /* ACFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F59E216F69FBB004E177B /* ACFileTransfer.m */; };
 		779F59E616F69FBB004E177B /* ACFileTransferDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F59E416F69FBB004E177B /* ACFileTransferDetails.m */; };
 		779F59EE16F6A492004E177B /* ShareMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F59ED16F6A492004E177B /* ShareMenuViewController.m */; };
@@ -350,6 +360,7 @@
 		779F59F716F6A8D0004E177B /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 779F59F616F6A8D0004E177B /* GameKit.framework */; };
 		779F59FA16F79996004E177B /* BluetoothHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F59F916F79996004E177B /* BluetoothHelper.m */; };
 		779F59FD16F7A459004E177B /* BluetoothViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F59FC16F7A459004E177B /* BluetoothViewController.m */; };
+		77A932DE171E57D3002712B8 /* home2.png in Resources */ = {isa = PBXBuildFile; fileRef = 77A932DD171E57D3002712B8 /* home2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -733,6 +744,17 @@
 		776DE9D216C9E1970054F35A /* VideoTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoTrack.m; sourceTree = "<group>"; };
 		776DE9D416C9E1980054F35A /* AltName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AltName.h; sourceTree = "<group>"; };
 		776DE9D516C9E1980054F35A /* AltName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AltName.m; sourceTree = "<group>"; };
+		776FEE2F16FAD8320084F547 /* BluetoothProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothProgressView.h; sourceTree = "<group>"; };
+		776FEE3016FAD8320084F547 /* BluetoothProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothProgressView.m; sourceTree = "<group>"; };
+		776FEE3A16FB95370084F547 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		776FEE3C16FB953E0084F547 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		776FEE3E16FB954D0084F547 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		776FEE4016FB95720084F547 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		776FEE4216FB957C0084F547 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		776FEE5616FBC5890084F547 /* postfb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = postfb.png; sourceTree = "<group>"; };
+		776FEE581700D5D70084F547 /* tablePause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tablePause.png; sourceTree = "<group>"; };
+		776FEE591700D5D70084F547 /* tablePlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tablePlay.png; sourceTree = "<group>"; };
+		776FEE5F1700EF520084F547 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		779F59E116F69FBB004E177B /* ACFileTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACFileTransfer.h; sourceTree = "<group>"; };
 		779F59E216F69FBB004E177B /* ACFileTransfer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACFileTransfer.m; sourceTree = "<group>"; };
 		779F59E316F69FBB004E177B /* ACFileTransferDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACFileTransferDetails.h; sourceTree = "<group>"; };
@@ -746,6 +768,7 @@
 		779F59F916F79996004E177B /* BluetoothHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothHelper.m; sourceTree = "<group>"; };
 		779F59FB16F7A459004E177B /* BluetoothViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothViewController.h; sourceTree = "<group>"; };
 		779F59FC16F7A459004E177B /* BluetoothViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothViewController.m; sourceTree = "<group>"; };
+		77A932DD171E57D3002712B8 /* home2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -753,6 +776,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				776FEE601700EF520084F547 /* CoreMedia.framework in Frameworks */,
+				776FEE4316FB957C0084F547 /* AdSupport.framework in Frameworks */,
+				776FEE4116FB95720084F547 /* CoreLocation.framework in Frameworks */,
+				776FEE3F16FB954D0084F547 /* libsqlite3.dylib in Frameworks */,
+				776FEE3D16FB953E0084F547 /* Social.framework in Frameworks */,
+				776FEE3B16FB95380084F547 /* Accounts.framework in Frameworks */,
 				779F59F716F6A8D0004E177B /* GameKit.framework in Frameworks */,
 				775CE82516E5818A006496B2 /* AVFoundation.framework in Frameworks */,
 				775CE82116E58113006496B2 /* MediaPlayer.framework in Frameworks */,
@@ -772,6 +801,8 @@
 		775CE82916E58698006496B2 /* audioButtons */ = {
 			isa = PBXGroup;
 			children = (
+				776FEE581700D5D70084F547 /* tablePause.png */,
+				776FEE591700D5D70084F547 /* tablePlay.png */,
 				775CE86316E9824A006496B2 /* youtube.png */,
 				775CE85A16E589AB006496B2 /* volume_high.png */,
 				775CE85B16E589AB006496B2 /* volume_low.png */,
@@ -832,6 +863,8 @@
 		775D44E316D1A349004E15B4 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				77A932DD171E57D3002712B8 /* home2.png */,
+				776FEE5616FBC5890084F547 /* postfb.png */,
 				775D44E416D1A360004E15B4 /* five_fish_splash.png */,
 				775D44E516D1A360004E15B4 /* flg */,
 				775D45D916D1A361004E15B4 /* icon.png */,
@@ -1128,6 +1161,8 @@
 				775D470316D45F21004E15B4 /* RNBlurModalView.m */,
 				775D470516D45F59004E15B4 /* DownloadProgressView.h */,
 				775D470616D45F59004E15B4 /* DownloadProgressView.m */,
+				776FEE2F16FAD8320084F547 /* BluetoothProgressView.h */,
+				776FEE3016FAD8320084F547 /* BluetoothProgressView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1152,6 +1187,12 @@
 		776DE8F016C9A2410054F35A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				776FEE5F1700EF520084F547 /* CoreMedia.framework */,
+				776FEE4216FB957C0084F547 /* AdSupport.framework */,
+				776FEE4016FB95720084F547 /* CoreLocation.framework */,
+				776FEE3E16FB954D0084F547 /* libsqlite3.dylib */,
+				776FEE3C16FB953E0084F547 /* Social.framework */,
+				776FEE3A16FB95370084F547 /* Accounts.framework */,
 				779F59F616F6A8D0004E177B /* GameKit.framework */,
 				779F59E016F69FBB004E177B /* ACFileTransfer */,
 				775CE82416E5818A006496B2 /* AVFoundation.framework */,
@@ -1255,10 +1296,10 @@
 				776DE91A16C9A27F0054F35A /* ContinentsViewController.m */,
 				776DE91B16C9A27F0054F35A /* CountriesViewController.h */,
 				776DE91C16C9A27F0054F35A /* CountriesViewController.m */,
-				776DE92A16C9A27F0054F35A /* LanguageDetailViewController.h */,
-				776DE92B16C9A27F0054F35A /* LanguageDetailViewController.m */,
 				776DE92E16C9A27F0054F35A /* LanguagesViewController.h */,
 				776DE92F16C9A27F0054F35A /* LanguagesViewController.m */,
+				776DE92A16C9A27F0054F35A /* LanguageDetailViewController.h */,
+				776DE92B16C9A27F0054F35A /* LanguageDetailViewController.m */,
 				775D46FE16D2D5B3004E15B4 /* MyProgramsViewController.h */,
 				775D46FF16D2D5B3004E15B4 /* MyProgramsViewController.m */,
 				775CE85E16E97829006496B2 /* YoutubeViewController.h */,
@@ -1665,6 +1706,10 @@
 				7728471216F68EBC00B29863 /* FiveFishDB.sqlite in Resources */,
 				779F59F416F6A712004E177B /* facebook.png in Resources */,
 				779F59F516F6A712004E177B /* twitter.png in Resources */,
+				776FEE5716FBC5890084F547 /* postfb.png in Resources */,
+				776FEE5A1700D5D70084F547 /* tablePause.png in Resources */,
+				776FEE5B1700D5D70084F547 /* tablePlay.png in Resources */,
+				77A932DE171E57D3002712B8 /* home2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1723,6 +1768,7 @@
 				779F59EE16F6A492004E177B /* ShareMenuViewController.m in Sources */,
 				779F59FA16F79996004E177B /* BluetoothHelper.m in Sources */,
 				779F59FD16F7A459004E177B /* BluetoothViewController.m in Sources */,
+				776FEE3116FAD8320084F547 /* BluetoothProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1799,9 +1845,14 @@
 		776DE90C16C9A2410054F35A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FiveFish/FiveFish-Prefix.pch";
 				INFOPLIST_FILE = "FiveFish/FiveFish-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1810,9 +1861,14 @@
 		776DE90D16C9A2410054F35A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FiveFish/FiveFish-Prefix.pch";
 				INFOPLIST_FILE = "FiveFish/FiveFish-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

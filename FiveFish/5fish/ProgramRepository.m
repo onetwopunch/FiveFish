@@ -51,10 +51,9 @@ static ProgramRepository * sharedRepo = nil;
     NSError * error;
     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:progFromJson options:nil error:&error];
     NSString * jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
+    NSLog(@"Json String: %@", jsonString);
     
     //get values from dictionary
-    NSLog(@"Program from Web %@", progFromJson);
     NSString * baseAudio = [progFromJson objectForKey:@"baseAudio"];
     NSString * baseHdpi = [progFromJson objectForKey:@"baseHdpi"];
     NSString * baseMdpi = [progFromJson objectForKey:@"baseMdpi"];
@@ -114,7 +113,7 @@ static ProgramRepository * sharedRepo = nil;
     program.totalSize = [NSNumber numberWithLong: totalFileSize];
     program.duration = [NSNumber numberWithInt:totalDuration];
     program.numTracks = [NSNumber numberWithInt:numTracks];
-    program.downloaded = [NSNumber numberWithBool:YES];
+//    program.downloaded = [NSNumber numberWithBool:YES];
     [program setAudioTracks:aTrackSet];
     
     if (![managedObjectContext save:&error]) {
@@ -125,7 +124,13 @@ static ProgramRepository * sharedRepo = nil;
     
 }
 
-
+-(void) setProgramDownloaded:(Program*)program{
+    program.downloaded = [NSNumber numberWithBool:YES];
+    NSError *error;
+    if (![managedObjectContext save:&error]) {
+        NSLog(@"Error setting program to be downloaded: %@", error);
+    }
+}
 
 -(Program*) getProgramById:(NSInteger) grn_id{
     NSEntityDescription * program = [NSEntityDescription entityForName:@"Program" inManagedObjectContext:managedObjectContext];
@@ -182,6 +187,32 @@ static ProgramRepository * sharedRepo = nil;
         return NO;
     }
     return YES;
+}
+
+-(BOOL) deleteProgramData: (Program*) program {
+    NSFileManager * manager = [NSFileManager defaultManager];
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *picturePath = [documentsDirectory stringByAppendingPathComponent:@"pictures"];
+    NSString * programPath = [picturePath stringByAppendingPathComponent:
+                              [NSString stringWithFormat:@"%05d", [program.grn_id integerValue]]];
+    
+    [manager removeItemAtPath:programPath error:&error];
+
+    NSString *audioPath = [documentsDirectory stringByAppendingPathComponent:@"audio"];
+    programPath = [audioPath stringByAppendingPathComponent:
+                              [NSString stringWithFormat:@"%05d", [program.grn_id integerValue]]];
+    [manager removeItemAtPath:programPath error:&error];
+    
+    program.downloaded = [NSNumber numberWithBool:NO];
+    if (![managedObjectContext save:&error]) {
+        NSLog(@"Program deletion failed: %@", error);
+        return NO;
+    }else {
+        return YES;
+    }
     
 }
 @end

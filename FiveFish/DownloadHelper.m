@@ -23,8 +23,12 @@
 
 -(void) downloadAudioFromPrograms: (NSArray*)programs{
 
+    
     WebServices *web = [[WebServices alloc] init];
     [web downloadTracksFromProgramArray:programs];
+    for (Program* prog in programs) {
+        [DataAccessLayer setProgramDownloaded:prog];
+    }
 }
 
 

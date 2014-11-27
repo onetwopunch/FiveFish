@@ -32,6 +32,7 @@
     [super viewDidLoad];
     self.title = @"My Programs";
     programsByLanguage = [DataAccessLayer getDownloadedProgramsByLanguage];
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
     //NSLog(@"My Programs: %@", programsByLanguage);
     if ([[programsByLanguage allKeys] count] == 0) {
         UIAlertView *alert =[[UIAlertView alloc] initWithTitle:@"No Programs"
@@ -99,19 +100,22 @@
 }
 */
 
-/*
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        NSString *key = [[programsByLanguage allKeys] objectAtIndex:[indexPath section]];
+        NSArray * programs = [programsByLanguage objectForKey:key];
+        Program * prog = [programs objectAtIndex: [indexPath row]];
+        [DataAccessLayer deleteProgramData:prog];
+        programsByLanguage = [DataAccessLayer getDownloadedProgramsByLanguage];
+        [tableView reloadData];
+    }
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.

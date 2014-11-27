@@ -26,6 +26,7 @@
 	audioControl = [[AudioControlView alloc] initWithFrame:self.view.bounds];
     helper = [[AudioHelper alloc] init];
     [helper queueTracksForProgramId:[programId integerValue]];
+    NSLog(@"Program ID Audio Ctrl: %d", [programId integerValue]);
     
     [self.view addSubview:audioControl];
     [audioControl.btnPlay addTarget:self action:@selector(play_pause) forControlEvents:UIControlEventTouchUpInside];

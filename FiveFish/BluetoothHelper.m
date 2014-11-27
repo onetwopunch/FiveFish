@@ -10,13 +10,18 @@
 #import "BluetoothServices.h"
 
 @implementation BluetoothHelper
+@synthesize service;
 
 -(void) connect: (GKSession*)session{
-    [[BluetoothServices fileTransferInstance] setSession:session];
-    [[BluetoothServices fileTransferInstance] connect];
+    service = [[BluetoothServices alloc] init];
+    [service.mFileTransfer setSession:session];
+    [service.mFileTransfer connect];
 }
-
+-(void) disconnect{
+    [service.mFileTransfer disconnect];
+}
 -(void) shareProgram: (Program*) program{
-    [BluetoothServices shareProgram:program];
+    
+    [service shareProgram:program];
 }
 @end

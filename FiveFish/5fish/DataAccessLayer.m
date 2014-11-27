@@ -114,6 +114,15 @@
     NSSortDescriptor * descriptor = [NSSortDescriptor sortDescriptorWithKey:@"file" ascending:YES];
     return [program.audioTracks sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
 }
+
++(BOOL) deleteProgramData: (Program*) program{
+    return [[ProgramRepository sharedRepo] deleteProgramData:program];
+}
+
++(void) setProgramDownloaded:(Program*)program{
+    return [[ProgramRepository sharedRepo] setProgramDownloaded:program];
+}
+
 //------------------------------------------------------------------------------------------------
 // initial setup DO NOT USE IN DEPLOYMENT
 //------------------------------------------------------------------------------------------------

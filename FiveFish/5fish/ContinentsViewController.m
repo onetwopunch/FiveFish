@@ -20,23 +20,28 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
-    }
+            }
     return self;
 }
-
+-(void) home {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    //self.locationArray = [[NSArray alloc ]initWithObjects:@"England", @"France", @"USA", nil];
+  
+
     self.locationArray = [DataAccessLayer getContinents];
     self.title = @"Select Continent";
+    
+    UIButton * btnHome = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage * imgHome = [UIImage imageNamed:@"home2.png"];
+    btnHome.frame = CGRectMake(0, 0, imgHome.size.width, imgHome.size.height);
+    [btnHome setImage:imgHome forState:UIControlStateNormal];
+    [btnHome addTarget:self action:@selector(home) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]  initWithCustomView:btnHome];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,44 +84,6 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -139,9 +106,15 @@
             if ([country.locationType isEqualToString: @"Country"]) {
                 [countryArray addObject:country];
             }
-            [subregions setObject:countryArray forKey:region.defaultName];
+            NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"defaultName" ascending:YES];
+            NSArray * countries = [countryArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+            [subregions setObject:countries forKey:region.defaultName];
         }
-        
+    }
+    for (NSString * key in [subregions allKeys]) {
+        if ([[subregions objectForKey:key] count]==0) {
+            [subregions removeObjectForKey:key];
+        }
     }
     countriesViewController.subregions = subregions;
     //.regionArray = [continent.relatedLocations allObjects];

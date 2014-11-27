@@ -60,37 +60,52 @@
     progressAlert = [[RNBlurModalView alloc] initWithView: progressView];
     
     isProgressShowing = NO;
+    userWarned = NO;
     
 }
 -(void)downloadButtonAction{
-    dialogAlert = [[UIAlertView alloc] initWithTitle:@"Download Programs"
-                                                      message:@"Would you like to download the selected programs to 'My Programs'?"
-                                                     delegate:self
-                                            cancelButtonTitle:@"No"
-                                            otherButtonTitles:@"Yes", nil];
-    [dialogAlert show];
+//    dialogAlert = [[UIAlertView alloc] initWithTitle:@"Download Programs"
+//                                                      message:@"Would you like to download the selected programs to 'My Programs'?"
+//                                                     delegate:self
+//                                            cancelButtonTitle:@"No"
+//                                            otherButtonTitles:@"Yes", nil];
+//    [dialogAlert show];
+    UIActionSheet * actions = [[UIActionSheet alloc] initWithTitle:@"Download selected programs to My Programs?" delegate:self cancelButtonTitle:@"No" destructiveButtonTitle:@"Yes" otherButtonTitles: nil];
+    [actions showInView:self.view];
 }
--(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if ([alertView.title isEqualToString:@"Download Programs"]) {
+    //if ([actionSheet.title isEqualToString:@"Download Programs"]) {
         
-        if (buttonIndex == alertView.cancelButtonIndex) {
-            NSLog(@"Cancelled");
-        }else{
-            
-            NSLog(@"Sending selected programs to Download Helper");
-            //sort and send programs to download to the download helper
-            NSArray *sortedKeys = [[selectedPrograms allKeys] sortedArrayUsingSelector: @selector(compare:)];
-            NSMutableArray *sortedValues = [NSMutableArray array];
-            for (NSString *key in sortedKeys)
-                [sortedValues addObject: [selectedPrograms objectForKey: key]];
+    if (buttonIndex == actionSheet.cancelButtonIndex) {
+        NSLog(@"Cancelled");
+    }else{
+        
+        NSLog(@"Sending selected programs to Download Helper");
+        //sort and send programs to download to the download helper
+        NSArray *sortedKeys = [[selectedPrograms allKeys] sortedArrayUsingSelector: @selector(compare:)];
+        NSMutableArray *sortedValues = [NSMutableArray array];
+        for (NSString *key in sortedKeys)
+            [sortedValues addObject: [selectedPrograms objectForKey: key]];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+
+        [actionSheet dismissWithClickedButtonIndex:[actionSheet cancelButtonIndex] animated:YES];
+        //[alertView dismissWithClickedButtonIndex:0 animated:YES];
+        
+        @try {
             [downloadHelper downloadAudioFromPrograms: sortedValues];
-            [dialogAlert dismissWithClickedButtonIndex:0 animated:YES];
             [progressAlert show];
             isProgressShowing = YES;
-            
         }
+        @catch (NSException *exception) {
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"No internet connection" message:nil delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+            [alert show];
+        }
+       
+        
     }
+
     
 }
 
@@ -113,7 +128,12 @@
     //[progressAlert dismissWithClickedButtonIndex:0 animated:YES];
     [progressAlert hide];
     isProgressShowing = NO;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self navigationController] popToRootViewControllerAnimated:YES];
+    if (![[notification object] boolValue]) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Download Failed" message:@"The download has failed. Please try again and email the developer if the problem persists." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+        [alert show];
+    }
 }
 -(void) totalProgressChanged:(NSNotification*) notification{
     float progress = [[notification object] floatValue];
@@ -195,13 +215,13 @@
             NSSet * progSet = [detailDict objectForKey: @"Program"];
             NSArray * allPrograms = [progSet allObjects];
             Program *prog = [allPrograms objectAtIndex:row];
-            NSString * entry = [[NSString alloc]initWithFormat: @"%@ : %d", prog.title, [prog.grn_id intValue]];
+            
             if([selectedPrograms objectForKey:[NSNumber numberWithInt:[indexPath row]]] != nil)
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
                 cell.accessoryType = UITableViewCellAccessoryNone;
-           
-            cell.textLabel.text = entry;
+            cell.imageView.image = [UIImage imageNamed:prog.type.pictureUrl];
+            cell.textLabel.text = prog.title;
         }
             break;
         case ALTNAME:
@@ -211,6 +231,7 @@
             AltName * name = [altArray objectAtIndex:row];
             cell.textLabel.text = name.altName;
             cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.imageView.image = nil;
         }
             break;
         case SAMPLE:
@@ -222,6 +243,7 @@
                 cell.textLabel.text = @"No Youtube Sample Available";
             }
             cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.imageView.image = nil;
         }
         default:
             break;
@@ -234,6 +256,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath section] == PROGRAM) {
+        if (!userWarned) {
+            if ([[selectedPrograms allKeys] count] >= 1) {
+                UIAlertView * warning = [[UIAlertView alloc] initWithTitle:@"Caution!" message:@"Downloading more than 1 program can take a long time. Make sure you have a fast enough connection to handle it." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+                [warning show];
+                userWarned = YES;
+            }
+        }
         
         //create temp dictionary for storing selected programs with index key and program value
         NSNumber * key = [NSNumber numberWithInt:[indexPath row]];

@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainMenuViewController.h"
+//#import <FacebookSDK/FacebookSDK.h>
 
 @implementation AppDelegate
 
@@ -32,8 +33,12 @@
     MainMenuViewController * root = [[MainMenuViewController alloc] init];
     self.navController = [[UINavigationController alloc] initWithRootViewController:root];
     
+   
+    
     [[UINavigationBar appearance] setTintColor:
      [UIColor orangeColor]];
+        
+
     
     [self.window setRootViewController:navController];
     //[self.window addSubview:navController.view];
@@ -46,6 +51,22 @@
     return YES;
 }
 
+// FBSample logic
+// If we have a valid session at the time of openURL call, we handle Facebook transitions
+// by passing the url argument to handleOpenURL; see the "Just Login" sample application for
+// a more detailed discussion of handleOpenURL
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    // attempt to extract a token from the url
+//    return [FBSession.activeSession handleOpenURL:url];
+}
+
+
+-(void) home {
+    [self.navController popToRootViewControllerAnimated:YES];
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -66,10 +87,13 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+  //  [FBSession.activeSession handleDidBecomeActive];
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+//    [FBSession.activeSession close];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
     [self saveContext];
 }

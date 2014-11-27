@@ -32,8 +32,20 @@
     [super viewDidLoad];
 
     self.title = @"Select Country";
-}
+    
+    UIButton * btnHome = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage * imgHome = [UIImage imageNamed:@"home2.png"];
+    btnHome.frame = CGRectMake(0, 0, imgHome.size.width, imgHome.size.height);
+    [btnHome setImage:imgHome forState:UIControlStateNormal];
+    [btnHome addTarget:self action:@selector(home) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]  initWithCustomView:btnHome];
 
+   
+
+}
+-(void) home{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -96,7 +108,8 @@
     NSString * key = [[subregions allKeys] objectAtIndex:[indexPath section]];
     NSArray * countries= [subregions objectForKey:key];
     Location * country = [countries objectAtIndex:[indexPath row]];//[[region.relatedLocations allObjects] objectAtIndex:[indexPath row]];
-    NSArray *languages = [country.languages allObjects];
+    NSSortDescriptor * descriptor = [NSSortDescriptor sortDescriptorWithKey:@"defaultName" ascending:YES];
+    NSArray * languages = [country.languages sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
     [detailViewController setLanguageArray:languages];
     
      [self.navigationController pushViewController:detailViewController animated:YES];

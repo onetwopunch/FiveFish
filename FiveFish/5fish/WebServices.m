@@ -44,8 +44,13 @@
         NSMutableArray * trackFiles = [[NSMutableArray alloc] init];
         NSMutableArray * picFiles = [[NSMutableArray alloc] init];
         for (AudioTrack* track in [updatedProg.audioTracks allObjects]) {
-            [trackFiles addObject:[track file]];
-            [picFiles addObject:[track picture]];
+            @try {
+                [trackFiles addObject:[track file]];
+                [picFiles addObject:[track picture]];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"Picture or Audio is nil");
+            }
         }
         NSString * baseAudio = updatedProg.baseAudio;
         NSString * basePic = updatedProg.basePic;
@@ -70,6 +75,7 @@
         for (NSString *file in trackFiles) {
             NSString * safeFile = [file stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             NSString * urlPath = [NSString stringWithFormat:@"%@%@", baseAudio, safeFile];
+          
             NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlPath]];
             
             AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -108,6 +114,8 @@
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 NSLog(@"Error: %@", error);
+                NSNotification * failure = [NSNotification notificationWithName:@"AudioDone" object:[NSNumber numberWithBool: NO]];
+                [[NSNotificationCenter defaultCenter] postNotification:failure];
             }];
             
             //Send progress notification
@@ -126,6 +134,8 @@
         }
     }
 }
+
+
 +(NSString*)createAudioDir{
     //Create Folder for audio tracks if it isn't alread created
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
